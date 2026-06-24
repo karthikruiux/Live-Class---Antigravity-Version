@@ -267,14 +267,14 @@ export const CourseCard: React.FC<CourseCardProps> = ({
 
   return (
     <motion.div
-      className={`w-[352px] h-[340px] border rounded-[24px] overflow-hidden flex flex-col justify-between transition-all duration-300 relative group select-none ${
+      className={`w-full max-w-[360px] mx-auto h-[340px] border rounded-[24px] overflow-hidden flex flex-col justify-between transition-all duration-300 relative group select-none ${
         isLive && isEnrolled
-          ? 'bg-red-50/20 border-red-200 shadow-[0_4px_16px_rgba(239,68,68,0.06)]' 
+          ? 'bg-white border-rose-200 shadow-[0_4px_20px_rgba(244,63,94,0.06)] hover:border-rose-400 hover:shadow-[0_12px_24px_rgba(244,63,94,0.1)]' 
           : isLive && !isEnrolled
-          ? 'bg-rose-50/5 border-rose-300 hover:border-rose-400 hover:shadow-md'
+          ? 'bg-white border-rose-200 hover:border-rose-400 hover:shadow-[0_12px_24px_rgba(244,63,94,0.1)]'
           : isEnrolled
-          ? 'bg-emerald-50/15 border-emerald-200 shadow-[0_4px_16px_rgba(16,185,129,0.06)]'
-          : 'bg-white border-slate-200 hover:border-blue-400 hover:shadow-md'
+          ? 'bg-white border-emerald-200/80 shadow-[0_4px_20px_rgba(16,185,129,0.04)] hover:border-emerald-400 hover:shadow-[0_12px_24px_rgba(16,185,129,0.08)]'
+          : 'bg-white border-slate-200/95 shadow-[0_2px_8px_rgba(15,23,42,0.02)] hover:border-blue-500/50 hover:shadow-[0_12px_24px_rgba(15,23,42,0.06)]'
       }`}
       whileHover={{ y: -4 }}
     >

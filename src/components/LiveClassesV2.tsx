@@ -840,7 +840,7 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
                         >
                           {activeSessionsTab === 'live' && (
                             liveFilteredCourses.length > 0 ? (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
                                 {liveFilteredCourses.map(course => (
                                   <CourseCard 
                                     key={course.id}
@@ -858,7 +858,7 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
 
                           {activeSessionsTab === 'upcoming' && (
                             upcomingFilteredCourses.length > 0 ? (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
                                 {upcomingFilteredCourses.map(course => (
                                   <CourseCard 
                                     key={course.id}
@@ -876,7 +876,7 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
 
                           {activeSessionsTab === 'past' && (
                             pastFilteredCourses.length > 0 ? (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
                                 {pastFilteredCourses.map(course => (
                                   <CourseCard 
                                     key={course.id}
