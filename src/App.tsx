@@ -35,7 +35,7 @@ const initialCourses: Course[] = [
   {
     id: 'p1',
     title: 'Placement Prep bootcamp',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Aptitude', 'Resume', 'Mock Interviews', 'Soft Skills'],
     classesCount: 48,
     runningBatches: 1,
@@ -50,7 +50,7 @@ const initialCourses: Course[] = [
   {
     id: 'p2',
     title: 'System Design & Scale',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Architecture', 'System Design', 'Scale', 'APIs'],
     classesCount: 52,
     runningBatches: 1,
@@ -63,7 +63,7 @@ const initialCourses: Course[] = [
   {
     id: 'p3',
     title: 'FAANG Interview Masterclass',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['LeetCode', 'DSA', 'System Design', 'Behavioral'],
     classesCount: 30,
     runningBatches: 2,
@@ -77,7 +77,7 @@ const initialCourses: Course[] = [
   {
     id: 'd1',
     title: 'Data Structures & Algorithms',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Java', 'Algorithms', 'Recursion', 'Graphs'],
     classesCount: 64,
     runningBatches: 2,
@@ -91,7 +91,7 @@ const initialCourses: Course[] = [
   {
     id: 'd2',
     title: 'Competitive Programming Prep',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['C++', 'Math', 'Dynamic Programming', 'Complexity'],
     classesCount: 56,
     runningBatches: 1,
@@ -104,7 +104,7 @@ const initialCourses: Course[] = [
   {
     id: 'd3',
     title: 'Advanced Trees & Graphs',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Advanced DSA', 'Trees', 'Graphs', 'Trie'],
     classesCount: 38,
     runningBatches: 0,
@@ -118,7 +118,7 @@ const initialCourses: Course[] = [
   {
     id: 'a1',
     title: 'Generative AI & Prompt Engineering',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['ML', 'Python', 'Gen AI', 'ChatGPT'],
     classesCount: 52,
     runningBatches: 1,
@@ -132,7 +132,7 @@ const initialCourses: Course[] = [
   {
     id: 'a2',
     title: 'Deep Learning & Neural Networks',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['PyTorch', 'CNNs', 'RNNs', 'NLP'],
     classesCount: 60,
     runningBatches: 2,
@@ -145,7 +145,7 @@ const initialCourses: Course[] = [
   {
     id: 'a3',
     title: 'Computer Vision Fundamentals',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['OpenCV', 'YOLO', 'Image Processing', 'TensorFlow'],
     classesCount: 45,
     runningBatches: 1,
@@ -159,7 +159,7 @@ const initialCourses: Course[] = [
   {
     id: 'b1',
     title: 'Node.js & Express REST APIs',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['JavaScript', 'Node.js', 'Express', 'APIs'],
     classesCount: 50,
     runningBatches: 1,
@@ -172,7 +172,7 @@ const initialCourses: Course[] = [
   {
     id: 'b2',
     title: 'SQL & NoSQL Databases Masterclass',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['PostgreSQL', 'MongoDB', 'Redis', 'Queries'],
     classesCount: 42,
     runningBatches: 1,
@@ -186,7 +186,7 @@ const initialCourses: Course[] = [
   {
     id: 'b3',
     title: 'Microservices with Go & Docker',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Go', 'gRPC', 'Docker', 'K8s'],
     classesCount: 55,
     runningBatches: 2,
@@ -200,7 +200,7 @@ const initialCourses: Course[] = [
   {
     id: 'f1',
     title: 'React & Tailwind CSS Fundamentals',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['React', 'Tailwind CSS', 'Vite', 'Hooks'],
     classesCount: 48,
     runningBatches: 1,
@@ -215,7 +215,7 @@ const initialCourses: Course[] = [
   {
     id: 'f2',
     title: 'Next.js Production Architecture',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Next.js', 'RSC', 'Vercel', 'Tailwind'],
     classesCount: 52,
     runningBatches: 2,
@@ -228,7 +228,7 @@ const initialCourses: Course[] = [
   {
     id: 'f3',
     title: 'Framer Motion & Animations',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['Framer Motion', 'Animations', 'CSS', 'UX'],
     classesCount: 36,
     runningBatches: 1,
@@ -242,7 +242,7 @@ const initialCourses: Course[] = [
   {
     id: 'r1',
     title: 'React Hooks & State Management Revision',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['React', 'Hooks', 'Redux', 'Zustand'],
     classesCount: 10,
     runningBatches: 1,
@@ -255,7 +255,7 @@ const initialCourses: Course[] = [
   {
     id: 'r2',
     title: 'System Design Interview Refresher',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     tags: ['System Design', 'Caching', 'Load Balancers', 'Scale'],
     classesCount: 8,
     runningBatches: 1,
@@ -332,7 +332,7 @@ function App() {
           // Send welcome test notification
           new Notification('NxtWave Academy', {
             body: 'System notifications enabled successfully! You will get alerts when classes start.',
-            icon: '/course_illustration_1.png'
+            icon: 'course_illustration_1.png'
           });
         }
       });
@@ -361,7 +361,7 @@ function App() {
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('🔴 Live Class Alert', {
           body: `"${liveAlert.title}" is live now. Topic: ${liveAlert.topic}`,
-          icon: '/course_illustration_1.png',
+          icon: 'course_illustration_1.png',
           tag: 'live-class-alert',
           requireInteraction: true
         });

@@ -18,7 +18,7 @@ const mockEnrolled: EnrolledCourse[] = [
   {
     id: 'e1',
     title: 'Generative AI & Prompt Engineering',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     completedClasses: 2,
     totalClasses: 52,
     nextClassTime: '6:00 PM',
@@ -29,7 +29,7 @@ const mockEnrolled: EnrolledCourse[] = [
   {
     id: 'e2',
     title: 'Data Structures & Algorithms',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     completedClasses: 34,
     totalClasses: 60,
     nextClassTime: '10:00 AM',
@@ -41,7 +41,7 @@ const mockEnrolled: EnrolledCourse[] = [
   {
     id: 'e3',
     title: 'Full Stack MERN Developer',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     completedClasses: 8,
     totalClasses: 45,
     nextClassTime: '6:00 PM',
@@ -53,7 +53,7 @@ const mockEnrolled: EnrolledCourse[] = [
   {
     id: 'e4',
     title: 'System Design Fundamentals',
-    image: '/course_illustration_1.png',
+    image: 'course_illustration_1.png',
     completedClasses: 15,
     totalClasses: 30,
     nextClassTime: '8:00 PM',

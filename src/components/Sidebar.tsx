@@ -10,8 +10,7 @@ import {
   Terminal, 
   LifeBuoy,
   ChevronRight,
-  ChevronLeft,
-  Menu
+  ChevronLeft
 } from 'lucide-react';
 
 interface SidebarProps {

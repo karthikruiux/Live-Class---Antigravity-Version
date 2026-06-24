@@ -74,7 +74,7 @@ export const HeroBanner: React.FC = () => {
           <div className="absolute w-[200px] h-[200px] bg-blue-500/15 rounded-full blur-[40px] -z-10"></div>
           
           <img 
-            src="/hero_illustration.png" 
+            src="hero_illustration.png" 
             alt="Futuristic learning setup"
             className="object-contain max-h-[190px] drop-shadow-[0_15px_35px_rgba(24,69,255,0.25)] select-none"
           />
