@@ -10,7 +10,6 @@ import {
   Download
 } from 'lucide-react';
 import { CourseCard } from './CourseCard';
-import { EnrolledCourseCarousel } from './EnrolledCourseCarousel';
 import { EnrolledProgressCarousel } from './EnrolledProgressCarousel';
 
 interface Course {
@@ -593,7 +592,6 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
 
         {!searchTerm && (
           <>
-            <EnrolledCourseCarousel />
             <EnrolledProgressCarousel />
           </>
         )}
