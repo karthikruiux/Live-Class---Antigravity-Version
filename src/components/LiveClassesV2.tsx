@@ -7,10 +7,15 @@ import {
   Monitor, 
   FileText, 
   Clock,
-  Download
+  Download,
+  Award,
+  Trophy,
+  CheckCircle,
+  Sparkles
 } from 'lucide-react';
 import { CourseCard } from './CourseCard';
 import { EnrolledProgressCarousel } from './EnrolledProgressCarousel';
+import { CourseCarousel } from './CourseCarousel';
 
 interface Course {
   id: string;
@@ -387,10 +392,53 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
     return true;
   });
 
-  // activeFilteredCourses represents classes the user is enrolled in
-  const activeFilteredCourses = filteredCoursesList.filter(c => c.isEnrolled || c.state === 'live' || c.state === 'enrolled');
-  // discoverFilteredCourses represents classes the user is NOT enrolled in
-  const discoverFilteredCourses = filteredCoursesList.filter(c => !c.isEnrolled && c.state !== 'live' && c.state !== 'enrolled');
+
+
+  // Split filtered courses by status
+  const getCourseStatus = (c: Course) => c.classStatus || (c.state === 'live' ? 'live' : c.state === 'enrolled' ? 'past' : 'upcoming');
+  const liveFilteredCourses = filteredCoursesList.filter(c => getCourseStatus(c) === 'live');
+  const upcomingFilteredCourses = filteredCoursesList.filter(c => getCourseStatus(c) === 'upcoming');
+  const pastFilteredCourses = filteredCoursesList.filter(c => getCourseStatus(c) === 'past');
+
+  // Split filtered courses by categories
+  const placementGroup = filteredCoursesList.filter(c => 
+    c.category === 'placement' && 
+    !c.title.toLowerCase().includes('interview') && 
+    !c.tags.some(t => t.toLowerCase().includes('interview') || t.toLowerCase().includes('mock')) &&
+    !c.title.toLowerCase().includes('system design')
+  );
+
+  const interviewGroup = filteredCoursesList.filter(c => 
+    c.category === 'placement' && 
+    (c.title.toLowerCase().includes('interview') || 
+     c.tags.some(t => t.toLowerCase().includes('interview') || t.toLowerCase().includes('mock')) ||
+     c.title.toLowerCase().includes('system design') ||
+     c.tags.some(t => t.toLowerCase().includes('system design')))
+  );
+
+  const projectsGroup = filteredCoursesList.filter(c => 
+    c.category === 'backend' || c.category === 'frontend' || c.isProject
+  );
+
+  const challengesGroup = filteredCoursesList.filter(c => 
+    c.category === 'dsa'
+  );
+
+  const aiGroup = filteredCoursesList.filter(c => 
+    c.category === 'ai'
+  );
+
+  const revisionGroup = filteredCoursesList.filter(c => 
+    c.category === 'revision' || c.isRevision
+  );
+
+  // Curated Recommendations Group (Trending or New courses)
+  const recommendedGroup = coursesList.filter(c => {
+    const isWeekendCourse = c.category === 'frontend' || c.tags.some(t => t.toLowerCase().includes('weekend'));
+    if (primaryFilter === 'weekly' && isWeekendCourse) return false;
+    if (primaryFilter === 'weekend' && !isWeekendCourse) return false;
+    return c.isTrending || c.isNew || c.showSaleableInfo;
+  });
 
   // Filtered lists for Section 3 & 4
   const workshopsFiltered = filterList(workshopItems);
@@ -654,68 +702,250 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
               className="space-y-16"
             >
               
-              {/* Section 1: Live Class Schedule Overview */}
-              <section className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {/* 1. Live Classes Section */}
+              {liveFilteredCourses.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-2 w-2 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </span>
+                        <span className="text-xs bg-red-50 text-red-700 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-red-250/30">
+                          Live Now
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Ongoing Live Sessions
+                        </h2>
+                      </div>
+                      <p className="text-slate-500 text-xs font-medium">
+                        Interactive live classrooms happening right now. Join and learn in real time.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {liveFilteredCourses.length} Active
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {liveFilteredCourses.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => handleJoinClass(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* 2. Upcoming Classes Section */}
+              {upcomingFilteredCourses.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-blue-50 text-blue-700 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-blue-200/30">
+                          Upcoming
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Scheduled Classes
+                        </h2>
+                      </div>
+                      <p className="text-slate-500 text-xs font-medium">
+                        Reserve your seat for these upcoming interactive sessions and bootcamps.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {upcomingFilteredCourses.length} Scheduled
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {upcomingFilteredCourses.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* 3. Past Classes Section */}
+              {pastFilteredCourses.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-emerald-50 text-emerald-700 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-emerald-200/30">
+                          Recorded
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Past Classes & Recordings
+                        </h2>
+                      </div>
+                      <p className="text-slate-500 text-xs font-medium">
+                        Access high-definition recordings, reference notes, and code repositories of past sessions.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {pastFilteredCourses.length} Available
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {pastFilteredCourses.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Empty State when no courses match active filters */}
+              {liveFilteredCourses.length === 0 && upcomingFilteredCourses.length === 0 && pastFilteredCourses.length === 0 && (
+                <div className="bg-white border border-slate-200/50 rounded-[24px] p-8 sm:p-12 text-center text-slate-400 text-xs font-bold shadow-sm space-y-3">
+                  <div className="text-3xl">📭</div>
+                  <p>No classes found matching the active filter and search criteria.</p>
+                  <button 
+                    onClick={handleClearAllFilters}
+                    className="text-xs font-extrabold text-blue-600 hover:text-blue-800 px-4 py-2 hover:bg-blue-50 border border-blue-200/50 rounded-xl transition-all cursor-pointer select-none"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              )}
+
+              {/* Styled Visual Separator */}
+              <div className="relative py-6 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-slate-200/60" />
+                </div>
+                <div className="relative bg-white border border-slate-200/80 shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-600 animate-pulse" />
+                  <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none">
+                    Explore Curated Specializations
+                  </span>
+                </div>
+              </div>
+
+              {/* 4. Recommended as per your journey Section */}
+              {recommendedGroup.length > 0 && (
+                <section className="space-y-6">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                        Active Classes
+                      <span className="text-xs bg-indigo-50 text-indigo-700 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-indigo-200/30 flex items-center gap-1 leading-none">
+                        <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
+                        <span>Recommended</span>
                       </span>
                       <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
-                        Ongoing & Live Classes
+                        Recommended as per your journey
                       </h2>
                     </div>
                     <p className="text-slate-500 text-xs font-medium">
-                      Your currently enrolled and active live classrooms based on filter selections.
+                      Curated trending paths, system design deep dives, and upcoming high-salary specializations tailored to your progress.
                     </p>
                   </div>
-                  <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
-                    Showing {activeFilteredCourses.length} Classes
-                  </div>
-                </div>
+                  <CourseCarousel 
+                    courses={recommendedGroup} 
+                    onEnroll={handleEnrollCourse} 
+                  />
+                </section>
+              )}
 
-                {activeFilteredCourses.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {activeFilteredCourses.map(course => (
-                      <CourseCard 
-                        key={course.id}
-                        {...course}
-                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-white border border-slate-200/50 rounded-[24px] p-6 sm:p-10 text-center text-slate-400 text-xs font-bold shadow-sm">
-                    No active or enrolled classes found matching the selected filters.
-                  </div>
-                )}
-              </section>
-
-              {/* Section 2: Explore Path Specializations */}
-              <section className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                        Explore Modules
-                      </span>
-                      <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
-                        Discover Path Specializations
-                      </h2>
+              {/* Sellable Section 1: Elite Placement Club Banner */}
+              <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-950 p-8 sm:p-10 text-white shadow-xl border border-slate-800">
+                <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-8 z-10">
+                  <div className="space-y-4 max-w-2xl">
+                    <div className="inline-flex items-center gap-1.5 bg-blue-500/15 border border-blue-400/20 px-3 py-1 rounded-full text-xs font-bold text-blue-300 uppercase tracking-wider leading-none">
+                      <Award className="w-3.5 h-3.5" />
+                      <span>Elite Placement Program</span>
                     </div>
-                    <p className="text-slate-400 text-xs font-medium">
-                      Focused engineering paths and bootcamps curated to upgrade your core coding metrics.
+                    <h3 className="text-2xl sm:text-3xl font-black tracking-tight font-heading leading-tight">
+                      Land your dream job in top tech companies.
+                    </h3>
+                    <p className="text-slate-350 text-xs sm:text-sm leading-relaxed">
+                      Join our rigorous, placement-backed bootcamp. Get intensive training in DSA, System Design, Full-Stack engineering, and mock interviews. Work directly with recruiters from top FAANG and Indian product startups.
                     </p>
+                    
+                    <div className="grid grid-cols-3 gap-4 pt-2">
+                      <div className="border-r border-white/10 pr-2">
+                        <p className="text-xl sm:text-2xl font-black text-blue-455">12 LPA</p>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Average Package</p>
+                      </div>
+                      <div className="border-r border-white/10 px-2">
+                        <p className="text-xl sm:text-2xl font-black text-emerald-400">42 LPA</p>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Highest Package</p>
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-xl sm:text-2xl font-black text-indigo-400">98.4%</p>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Placement Rate</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
-                    Showing {discoverFilteredCourses.length} Pathways
+                  
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-2xl lg:w-[320px] shrink-0 space-y-5">
+                    <div className="space-y-3">
+                      <p className="text-xs text-slate-350 font-semibold text-center">
+                        Trusted by thousands of ambitious developers
+                      </p>
+                      <div className="flex items-center justify-center -space-x-2">
+                        <img className="w-8 h-8 rounded-full border border-slate-900 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop&auto=format&q=80" alt="Student" />
+                        <img className="w-8 h-8 rounded-full border border-slate-900 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop&auto=format&q=80" alt="Student" />
+                        <img className="w-8 h-8 rounded-full border border-slate-900 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop&auto=format&q=80" alt="Student" />
+                        <img className="w-8 h-8 rounded-full border border-slate-900 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&fit=crop&auto=format&q=80" alt="Student" />
+                        <div className="w-8 h-8 rounded-full border border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-355">
+                          +5K
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-slate-400 font-medium text-center">
+                        5,000+ Students hired in elite product firms.
+                      </p>
+                    </div>
+                    
+                    <button 
+                      onClick={() => alert("Redirecting to scholarship application form... 🚀")}
+                      className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all cursor-pointer text-center"
+                    >
+                      Apply for Scholarship
+                    </button>
                   </div>
                 </div>
+              </section>
 
-                {discoverFilteredCourses.length > 0 ? (
+              {/* 5. Placement Related Section */}
+              {placementGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Career Tracks
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Placement Related Bootcamps
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Core job-preparedness tracks, soft skills, and comprehensive aptitude bootcamps.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {placementGroup.length} Specializations
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {discoverFilteredCourses.map(course => (
+                    {placementGroup.map(course => (
                       <CourseCard 
                         key={course.id}
                         {...course}
@@ -723,14 +953,244 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
                       />
                     ))}
                   </div>
-                ) : (
-                  <div className="bg-white border border-slate-200/50 rounded-[24px] p-6 sm:p-10 text-center text-slate-400 text-xs font-bold shadow-sm">
-                    No specialization pathways found matching the selected filters.
+                </section>
+              )}
+
+              {/* 6. Interview Prep Section */}
+              {interviewGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-violet-100 text-violet-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Interview Prep
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          System Design & FAANG Prep
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Syllabus focused on system design scalability, architectural patterns, and mock coding marathons.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {interviewGroup.length} Pathways
+                    </div>
                   </div>
-                )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {interviewGroup.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Sellable Section 2: 1-on-1 FAANG Mock Prep Banner */}
+              <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-900 via-zinc-900 to-neutral-955 p-8 sm:p-10 text-white shadow-xl border border-neutral-800">
+                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -left-20 -top-20 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-8 z-10">
+                  <div className="space-y-4 max-w-2xl">
+                    <div className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-400/20 px-3 py-1 rounded-full text-xs font-bold text-amber-450 uppercase tracking-wider leading-none">
+                      <Trophy className="w-3.5 h-3.5" />
+                      <span>FAANG Interview Readiness</span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black tracking-tight font-heading leading-tight text-neutral-100">
+                      Get Mock Interviewed by FAANG Mentors.
+                    </h3>
+                    <p className="text-neutral-405 text-xs sm:text-sm leading-relaxed">
+                      Watch a senior engineer break down your DSA logic and system architecture in a realistic mock environment. Get granular scoring on problem solving, coding speed, communication, and system design.
+                    </p>
+                    
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-neutral-300 text-[11px] sm:text-xs font-semibold">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-amber-450 shrink-0" />
+                        <span>Real-time DSA logic & code optimization feedback</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-amber-450 shrink-0" />
+                        <span>ATS-friendly resume scoring & audit</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-amber-450 shrink-0" />
+                        <span>System Design architecture deep dive</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-amber-455 shrink-0" />
+                        <span>Behavioral & leadership principles prep</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-neutral-850/60 border border-neutral-800/80 p-6 rounded-2xl lg:w-[320px] shrink-0 space-y-4 text-center">
+                    <div className="space-y-1">
+                      <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Limited Slots Available</p>
+                      <p className="text-base sm:text-lg font-black text-amber-455 flex items-center justify-center gap-1">
+                        <span className="relative flex h-2 w-2 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
+                        <span>Only 3 Slots Left This Week</span>
+                      </p>
+                    </div>
+                    
+                    <div className="bg-neutral-900/60 border border-neutral-800 p-3 rounded-[10px] text-[10px] text-neutral-400 text-left font-medium leading-normal">
+                      🛡️ <strong className="text-neutral-250">Free Session:</strong> This mock interview is completely free for enrolled students who maintain a &gt;80% progress score.
+                    </div>
+                    
+                    <button 
+                      onClick={() => alert("Opening live calendar booking widget... 📅")}
+                      className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-neutral-950 font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-amber-500/15 active:scale-[0.98] transition-all cursor-pointer"
+                    >
+                      Book Free Slot Now
+                    </button>
+                  </div>
+                </div>
               </section>
 
-              {/* Section 3: Upcoming Workshops & Masterclasses */}
+              {/* 7. Projects Section */}
+              {projectsGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Projects
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Build Real-World Projects
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Production-grade fullstack web applications, database schema designs, and microservices in Go.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {projectsGroup.length} Projects
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projectsGroup.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* 8. Challenges Section */}
+              {challengesGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-fuchsia-100 text-fuchsia-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Challenges
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          DSA & Coding Challenges
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Solve complex graph, tree, and dynamic programming challenges with expert editorial walkthroughs.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {challengesGroup.length} Challenges
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {challengesGroup.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* 9. AI & Emerging Tech Section */}
+              {aiGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Generative AI
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          AI & Emerging Deep Tech
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Generative AI, Prompt Engineering, LLM orchestration with LangChain, and Computer Vision models.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {aiGroup.length} Pathways
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {aiGroup.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* 10. Revision Classes Section */}
+              {revisionGroup.length > 0 && (
+                <section className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Revision
+                        </span>
+                        <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
+                          Crash Courses & Revision Sprints
+                        </h2>
+                      </div>
+                      <p className="text-slate-400 text-xs font-medium">
+                        Quick refresher sessions to solidifying your core web dev concepts and system design blueprints.
+                      </p>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                      {revisionGroup.length} Sprints
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {revisionGroup.map(course => (
+                      <CourseCard 
+                        key={course.id}
+                        {...course}
+                        onEnroll={() => course.state === 'live' ? handleJoinClass(course.id) : handleEnrollCourse(course.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Section 11: Upcoming Workshops & Masterclasses */}
               <section className="bg-white border border-slate-100 rounded-[32px] p-8 shadow-sm space-y-6">
                 <div className="space-y-1">
                   <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
@@ -793,7 +1253,7 @@ export const LiveClassesV2: React.FC<LiveClassesV2Props> = ({
                 )}
               </section>
 
-              {/* Section 4: Recommended Learning Resources */}
+              {/* Section 12: Recommended Learning Resources */}
               <section className="space-y-6">
                 <div className="space-y-1">
                   <h2 className="text-[20px] font-bold text-slate-800 tracking-tight">
