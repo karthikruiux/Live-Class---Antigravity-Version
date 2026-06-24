@@ -69,6 +69,9 @@ export const EnrolledCourseCarousel: React.FC = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  // Filter out past classes to only show active classes (live & upcoming)
+  const activeEnrolled = mockEnrolled.filter(course => course.state !== 'past');
+
   const checkScroll = () => {
     if (containerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
@@ -91,7 +94,7 @@ export const EnrolledCourseCarousel: React.FC = () => {
         observer.disconnect();
       };
     }
-  }, []);
+  }, [activeEnrolled.length]);
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (containerRef.current) {
@@ -113,7 +116,7 @@ export const EnrolledCourseCarousel: React.FC = () => {
             My Enrolled Classes
           </h2>
           <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full border border-emerald-100">
-            {mockEnrolled.length} Active
+            {activeEnrolled.length} Active
           </span>
         </div>
 
@@ -150,7 +153,7 @@ export const EnrolledCourseCarousel: React.FC = () => {
         className="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1"
         style={{ scrollSnapType: 'x mandatory' }}
       >
-        {mockEnrolled.map((course) => {
+        {activeEnrolled.map((course) => {
           const isLive = course.state === 'live';
           const isUpcoming = course.state === 'upcoming';
           const isPast = course.state === 'past';
