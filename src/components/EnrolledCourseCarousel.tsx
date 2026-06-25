@@ -182,7 +182,7 @@ export const EnrolledCourseCarousel: React.FC = () => {
                 {/* Status Badge */}
                 {isLive && (
                   <div className="bg-[#fee2e2] flex gap-1.5 items-center px-2.5 py-1 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-650 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
                     <span className="text-[#b91c1c] text-[11px] font-bold uppercase tracking-wider">
                       Live Now
                     </span>

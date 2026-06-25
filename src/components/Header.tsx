@@ -14,8 +14,8 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
   searchValue?: string;
   courses: SuggestionCourse[];
-  layoutVersion: 'V1' | 'V2' | 'V3';
-  onLayoutVersionChange: (version: 'V1' | 'V2' | 'V3') => void;
+  layoutVersion: 'V1' | 'V2' | 'V3' | 'V4';
+  onLayoutVersionChange: (version: 'V1' | 'V2' | 'V3' | 'V4') => void;
   onMenuToggle?: () => void;
   isScrolled?: boolean;
 }
@@ -60,7 +60,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className={`bg-white border-b border-slate-200/80 px-4 sm:px-6 lg:px-10 py-4 sm:py-5 flex flex-col gap-4 z-40 ${
+    <header className={`bg-white border-b border-slate-200/80 px-4 sm:px-6 lg:px-10 py-4 sm:py-5 flex flex-col gap-4 z-40 transition-all duration-300 ${
+      isScrolled ? 'shadow-md bg-white/95 backdrop-blur-md' : ''
+    } ${
       layoutVersion === 'V2' ? 'relative' : 'sticky top-0'
     }`}>
       <div className="flex items-center justify-between gap-4">
@@ -94,98 +96,98 @@ export const Header: React.FC<HeaderProps> = ({
           
           {/* Search Bar with Suggestions */}
           <div ref={dropdownRef} className="relative w-full">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search classes, tags, or categories..."
-              value={searchValue}
-              onFocus={() => setIsFocused(true)}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-              className="w-full pl-12 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
-            />
-            {searchValue && (
-              <button 
-                onClick={handleClearSearch}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full transition-all"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search classes, tags, or categories..."
+                value={searchValue}
+                onFocus={() => setIsFocused(true)}
+                onChange={(e) => onSearchChange?.(e.target.value)}
+                className="w-full pl-12 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
+              />
+              {searchValue && (
+                <button 
+                  onClick={handleClearSearch}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
 
-          {/* Suggestions Dropdown */}
-          {isFocused && (
-            <div className="absolute top-[52px] left-0 right-0 bg-white border border-slate-200/80 rounded-2xl shadow-2xl p-4 z-50 flex flex-col gap-3.5">
-              
-              {/* Header label */}
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                {searchValue.trim() ? 'Matching Courses' : 'Trending Courses'}
-              </div>
-
-              {/* Suggestions List */}
-              <div className="flex flex-col gap-1">
-                {filteredSuggestions.map((course) => (
-                  <button
-                    key={course.id}
-                    onClick={() => handleSuggestionClick(course.title)}
-                    className="flex items-center justify-between p-2.5 hover:bg-slate-50 rounded-xl transition-colors text-left w-full group"
-                  >
-                    <div className="flex flex-col min-w-0 pr-4">
-                      <span className="text-[13.5px] font-bold text-slate-800 truncate group-hover:text-primary-blue transition-colors">
-                        {highlightText(course.title, searchValue)}
-                      </span>
-                      <span className="text-[11px] text-slate-400 font-semibold uppercase mt-0.5 tracking-wider">
-                        {course.category}
-                      </span>
-                    </div>
-
-                    {/* Status badge in suggestion */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      {course.state === 'live' && (
-                        <span className="bg-red-50 text-red-600 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-red-100 animate-pulse">
-                          LIVE
-                        </span>
-                      )}
-                      {course.state === 'enrolled' && (
-                        <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">
-                          ENROLLED
-                        </span>
-                      )}
-                      <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </div>
-                  </button>
-                ))}
-                
-                {filteredSuggestions.length === 0 && (
-                  <div className="text-slate-400 text-xs py-4 text-center">
-                    No matching classes found.
-                  </div>
-                )}
-              </div>
-
-              {/* Tag suggestions */}
-              {!searchValue.trim() && (
-                <div className="border-t border-slate-100 pt-3 flex flex-col gap-2">
+              {/* Suggestions Dropdown (aligned exactly under the input) */}
+              {isFocused && (
+                <div className="absolute top-[52px] left-0 right-0 bg-white border border-slate-200/80 rounded-2xl shadow-2xl p-4 z-50 flex flex-col gap-3.5">
+                  
+                  {/* Header label */}
                   <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Popular Tags
+                    {searchValue.trim() ? 'Matching Courses' : 'Trending Courses'}
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['Gen AI', 'DSA', 'Next.js', 'System Design', 'Python'].map((tag) => (
+
+                  {/* Suggestions List */}
+                  <div className="flex flex-col gap-1">
+                    {filteredSuggestions.map((course) => (
                       <button
-                        key={tag}
-                        onClick={() => handleSuggestionClick(tag)}
-                        className="text-xs bg-slate-100 hover:bg-blue-50 hover:text-primary-blue text-slate-600 px-3 py-1.5 rounded-lg font-bold transition-colors"
+                        key={course.id}
+                        onClick={() => handleSuggestionClick(course.title)}
+                        className="flex items-center justify-between p-2.5 hover:bg-slate-50 rounded-xl transition-colors text-left w-full group"
                       >
-                        #{tag}
+                        <div className="flex flex-col min-w-0 pr-4">
+                          <span className="text-[13.5px] font-bold text-slate-800 truncate group-hover:text-primary-blue transition-colors">
+                            {highlightText(course.title, searchValue)}
+                          </span>
+                          <span className="text-[11px] text-slate-400 font-semibold uppercase mt-0.5 tracking-wider">
+                            {course.category}
+                          </span>
+                        </div>
+
+                        {/* Status badge in suggestion */}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {course.state === 'live' && (
+                            <span className="bg-red-50 text-red-600 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-red-100 animate-pulse">
+                              LIVE
+                            </span>
+                          )}
+                          {course.state === 'enrolled' && (
+                            <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-100">
+                              ENROLLED
+                            </span>
+                          )}
+                          <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </div>
                       </button>
                     ))}
+                    
+                    {filteredSuggestions.length === 0 && (
+                      <div className="text-slate-400 text-xs py-4 text-center">
+                        No matching classes found.
+                      </div>
+                    )}
                   </div>
+
+                  {/* Tag suggestions */}
+                  {!searchValue.trim() && (
+                    <div className="border-t border-slate-100 pt-3 flex flex-col gap-2">
+                      <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                        Popular Tags
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Gen AI', 'DSA', 'Next.js', 'System Design', 'Python'].map((tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => handleSuggestionClick(tag)}
+                            className="text-xs bg-slate-100 hover:bg-blue-50 hover:text-primary-blue text-slate-600 px-3 py-1.5 rounded-lg font-bold transition-colors"
+                          >
+                            #{tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
+          </div>
         </div>
 
         {/* Right side controls */}
@@ -221,6 +223,16 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               V3
+            </button>
+            <button
+              onClick={() => onLayoutVersionChange('V4')}
+              className={`px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer select-none ${
+                layoutVersion === 'V4'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-750'
+              }`}
+            >
+              V4
             </button>
           </div>
 

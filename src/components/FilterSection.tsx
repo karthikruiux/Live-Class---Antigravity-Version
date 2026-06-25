@@ -83,7 +83,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
           {searchTerm && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-12 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-650 hover:bg-slate-100 rounded-full transition-all cursor-pointer"
+              className="absolute right-12 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all cursor-pointer"
               title="Clear Search"
             >
               <X className="w-4 h-4" />

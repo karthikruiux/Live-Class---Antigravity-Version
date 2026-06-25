@@ -193,21 +193,26 @@ export const EnrolledProgressCarousel: React.FC = () => {
           const progressPercent = Math.round((course.completedClasses / course.totalClasses) * 100);
           const isLive = course.state === 'live';
           
+          // Dynamically resolve border colors based on theme bg
+          const isRedTheme = course.bgColor.includes('red') || isLive;
+          const isBlueTheme = course.bgColor.includes('blue') || course.bgColor.includes('sky');
+          const borderClass = isRedTheme
+            ? 'border-red-200 bg-white shadow-[0px_4px_16px_rgba(239,68,68,0.04)] ring-1 ring-red-100/50'
+            : isBlueTheme
+            ? 'border-blue-100 bg-white shadow-[0px_4px_16px_rgba(59,130,246,0.03)] ring-1 ring-blue-50/50'
+            : 'border-slate-200 bg-white shadow-[0px_2px_8px_rgba(15,23,42,0.02)]';
+
           return (
             <div
               key={course.id}
-              className={`flex-shrink-0 w-[295px] xs:w-[360px] sm:w-[468px] h-[144px] bg-white border p-3 flex items-center gap-4 hover:shadow-md transition-all duration-300 snap-start rounded-full ${
-                isLive
-                  ? 'border-red-200/90 shadow-[0px_4px_12px_0px_rgba(239,68,68,0.06)]'
-                  : 'border-slate-200 shadow-[0px_2px_8px_0px_rgba(15,23,42,0.04)]'
-              }`}
+              className={`flex-shrink-0 w-[295px] xs:w-[360px] sm:w-[450px] h-[144px] border p-3.5 flex items-center gap-4 hover:shadow-md transition-all duration-300 snap-start rounded-[28px] ${borderClass}`}
             >
               {/* Dynamic Color Image Area */}
-              <div className={`relative shrink-0 w-[120px] h-[120px] rounded-full ${course.bgColor} flex items-center justify-center overflow-visible`}>
+              <div className={`relative shrink-0 w-[110px] h-[110px] rounded-full ${course.bgColor} flex items-center justify-center overflow-visible`}>
                 <img 
                   src={course.image} 
                   alt="Illustration" 
-                  className="w-20 h-20 object-contain pointer-events-none"
+                  className="w-18 h-18 object-contain pointer-events-none"
                 />
                 {/* Circular Progress Badge overlay */}
                 <CircularMiniProgress percent={progressPercent} />
@@ -215,49 +220,49 @@ export const EnrolledProgressCarousel: React.FC = () => {
 
               {/* Course details */}
               <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
-                <div className="flex flex-col min-w-0 pr-2">
-                  <h4 className="text-[14px] font-bold text-slate-900 leading-snug truncate">
+                <div className="flex flex-col min-w-0">
+                  <h4 className="text-[14px] font-extrabold text-slate-900 leading-snug truncate">
                     {course.title}
                   </h4>
-                  <p className="text-[12px] text-slate-500 font-medium">
+                  <p className="text-[11.5px] text-slate-400 font-bold mt-0.5">
                     {course.completedClasses} of {course.totalClasses} Classes Completed
                   </p>
                 </div>
 
                 {/* Slots timing info */}
-                <div className="flex gap-1 items-center text-[12px] text-slate-500 w-full pr-2">
+                <div className="flex gap-1 items-center text-[12px] text-slate-400 w-full pr-2 font-medium">
                   {isLive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-650 animate-pulse mr-1 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1 shrink-0" />
                   )}
-                  <span className="font-bold text-slate-900">{course.nextClassTime}</span>
-                  <span>|</span>
-                  <span className="font-bold text-slate-900">{course.nextClassEndTime}</span>
-                  <span>:</span>
-                  <span className="truncate flex-1 min-w-0 font-medium">
+                  <span className="font-extrabold text-slate-800">{course.nextClassTime}</span>
+                  <span className="text-slate-300">|</span>
+                  <span className="font-extrabold text-slate-800">{course.nextClassEndTime}</span>
+                  <span className="text-slate-300">:</span>
+                  <span className="truncate flex-1 min-w-0 font-medium text-slate-500 ml-0.5">
                     {course.nextClassTopic}
                   </span>
                 </div>
 
                 {/* Actions Buttons */}
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-3.5 items-center mt-0.5">
                   {isLive ? (
                     <button 
                       onClick={() => alert(`Joining live class for: ${course.title}`)}
-                      className="h-8 bg-[#dc2626] hover:bg-[#b91c1c] text-white rounded-xl text-xs font-bold px-4 transition-all cursor-pointer shadow-md shadow-red-500/10 select-none active:scale-[0.97]"
+                      className="h-8 bg-[#e11d48] hover:bg-[#be123c] text-white rounded-xl text-xs font-black px-4.5 transition-all cursor-pointer shadow-sm shadow-red-500/15 select-none active:scale-[0.97]"
                     >
                       Join Live
                     </button>
                   ) : (
                     <button 
                       onClick={() => alert(`Starting class at: ${course.nextClassTime}`)}
-                      className="h-8 border border-slate-200 hover:bg-slate-50 text-[#020617] rounded-xl text-xs font-bold px-4 transition-all cursor-pointer shadow-sm select-none active:scale-[0.97]"
+                      className="h-8 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-black px-4.5 transition-all cursor-pointer shadow-sm select-none active:scale-[0.97]"
                     >
                       Starts at {course.nextClassTime}
                     </button>
                   )}
                   <button 
                     onClick={() => alert(`Showing details for: ${course.title}`)}
-                    className="text-xs font-bold text-[#002eff] hover:underline cursor-pointer select-none whitespace-nowrap"
+                    className="text-xs font-black text-[#0043ff] hover:underline cursor-pointer select-none whitespace-nowrap"
                   >
                     View Details
                   </button>
