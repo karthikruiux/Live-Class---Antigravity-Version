@@ -2306,7 +2306,7 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                       <span>Recommended</span>
                     </span>
                     <h2 className="text-[20px] sm:text-[24px] font-bold text-slate-800 tracking-tight font-heading">
-                      Recommended as per your journey
+                      Recommended for you
                     </h2>
                   </div>
                   <p className="text-slate-500 text-xs sm:text-[13px] font-medium">
