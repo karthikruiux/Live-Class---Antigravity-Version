@@ -25,6 +25,7 @@ import {
   History
 } from 'lucide-react';
 import { highlightText } from '../utils/searchHighlight';
+import { EnrolledProgressCarousel } from './EnrolledProgressCarousel';
 
 interface SubTopic {
   id: string;
@@ -2272,6 +2273,9 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                 </button>
               </div>
             </div>
+
+            {/* My Learning Progress Section */}
+            <EnrolledProgressCarousel />
 
             {/* Premium Figma Batch Category Tabs (Placed directly on the page) */}
             <div className="w-full mt-2 relative select-none">
