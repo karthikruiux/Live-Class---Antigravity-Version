@@ -149,7 +149,7 @@ export const EnrolledProgressCarousel: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-[20px] sm:text-[24px] font-bold text-slate-800 font-heading tracking-tight">
-            My Learning Progress
+            Enrolled Courses
           </h2>
           <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100">
             {mockProgressCourses.length} Batches
