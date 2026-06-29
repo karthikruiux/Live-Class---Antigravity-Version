@@ -2411,13 +2411,43 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
 
             {/* Main Course Grid */}
             <div className="mt-4">
+              {selectedCardType !== 'all' && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-[20px] font-extrabold text-slate-900 font-heading tracking-tight leading-none">
+                      {selectedCardType === 'placement' ? 'Placement Prep' : selectedCardType === 'revision' ? 'Revision' : selectedCardType === 'challenges' ? 'Challenges' : selectedCardType === 'interview' ? 'Interview Prep' : selectedCardType === 'projects' ? 'Projects' : 'Courses'} for your Journey
+                    </h3>
+                    <span className="bg-[#eff6ff] text-[#002eff] text-[11px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider border border-[#dbeaf8] select-none">
+                      Picked for you
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 bg-[#f0fdf4] border border-emerald-100 rounded-xl px-4 py-2 w-full max-w-2xl shadow-sm">
+                    <div className="flex items-center -space-x-2 shrink-0">
+                      <img 
+                        className="w-6 h-6 rounded-full border-2 border-white object-cover" 
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop&auto=format&q=80" 
+                        alt="student" 
+                      />
+                      <img 
+                        className="w-6 h-6 rounded-full border-2 border-white object-cover" 
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop&auto=format&q=80" 
+                        alt="student" 
+                      />
+                      <img 
+                        className="w-6 h-6 rounded-full border-2 border-white object-cover" 
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop&auto=format&q=80" 
+                        alt="student" 
+                      />
+                    </div>
+                    <p className="text-[13px] font-bold text-emerald-800 tracking-tight leading-none">
+                      {selectedCardType === 'placement' ? '1,500+' : selectedCardType === 'revision' ? '800+' : selectedCardType === 'challenges' ? '1,100+' : selectedCardType === 'interview' ? '2,000+' : selectedCardType === 'projects' ? '1,350+' : '2,400+'} students enrolled this week across these courses
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-end justify-between mb-6">
                 <div className="flex flex-col gap-1">
-                  {selectedCardType !== 'all' ? (
-                    <h3 className="text-[18px] font-extrabold text-slate-900 font-heading tracking-tight leading-none mb-1">
-                      {selectedCardType === 'placement' ? 'Placement Prep' : selectedCardType === 'revision' ? 'Revision' : selectedCardType === 'challenges' ? 'Challenges' : selectedCardType === 'interview' ? 'Interview Prep' : selectedCardType === 'projects' ? 'Projects' : 'Courses'}
-                    </h3>
-                  ) : null}
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-slate-500 font-semibold">
                       Showing <strong className="text-slate-800 font-bold">{filteredCourses.length}</strong> {filteredCourses.length === 1 ? 'class' : 'classes'}
