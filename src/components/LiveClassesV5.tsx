@@ -2423,22 +2423,10 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
                       }
                     };
 
-                    // Render schedule badges with exact batch type text
-                    const renderScheduleBadge = (type: string, _courseId: string) => {
-                      const isWeekend = type === 'weekend';
-                      return (
-                        <div className="absolute bg-white flex items-center left-0 pl-6 pr-4 py-2 rounded-tr-[16px] top-[-24px] border-t border-r border-slate-200/50 shadow-[1px_-1px_3px_0px_rgba(15,23,42,0.02)] z-10">
-                          <p className={`font-sans font-bold text-[11px] tracking-wider whitespace-nowrap uppercase ${
-                            isWeekend ? 'text-amber-700' : 'text-indigo-600'
-                          }`}>
-                            {isWeekend ? 'Weekend Batch' : 'Weekday Batch'}
-                          </p>
-                        </div>
-                      );
-                    };
+
 
                     const cardBorderClass = isLive
-                      ? 'border-rose-200 shadow-[0_4px_20px_rgba(244,63,94,0.06)] hover:border-rose-400 hover:shadow-[0_12px_24px_rgba(244,63,94,0.1)]'
+                      ? 'border-rose-300 shadow-[0_4px_20px_rgba(244,63,94,0.06)] animate-live-pulse-glow hover:border-rose-400 hover:shadow-[0_12px_24px_rgba(244,63,94,0.1)]'
                       : isCompleted
                       ? 'border-emerald-200/85 shadow-[0_4px_20px_rgba(16,185,129,0.04)] hover:border-emerald-400 hover:shadow-[0_12px_24px_rgba(16,185,129,0.08)]'
                       : 'border-slate-250/95 shadow-[0_2px_8px_rgba(15,23,42,0.02)] hover:border-blue-500/50 hover:shadow-[0_12px_24px_rgba(15,23,42,0.06)]';
@@ -2498,8 +2486,6 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
 
                         {/* Content Area */}
                         <div className="px-5 pb-4 pt-3.5 shrink-0 flex flex-col justify-between relative flex-1">
-                          {/* Sticking schedule badge */}
-                          {renderScheduleBadge(course.scheduleType || '', course.id)}
 
                           <div className="space-y-2">
                             {/* Category Badge Pill */}
@@ -2529,6 +2515,17 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
                                   +{course.tags.length - 3}
                                 </span>
                               )}
+                            </div>
+
+                            {/* Card-Level Schedule Badge */}
+                            <div className="flex mt-1.5">
+                              <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg border leading-none select-none ${
+                                course.scheduleType === 'weekend'
+                                  ? 'text-amber-700 bg-amber-50/70 border-amber-200'
+                                  : 'text-indigo-750 bg-indigo-50/70 border-indigo-200'
+                              }`}>
+                                {course.scheduleType === 'weekend' ? 'Weekend Batch' : 'Weekday Batch'}
+                              </span>
                             </div>
                           </div>
 

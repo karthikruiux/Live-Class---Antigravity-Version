@@ -17,6 +17,18 @@
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+
+  --animate-live-pulse-glow: live-pulse-glow 2s infinite ease-in-out;
+  @keyframes live-pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.35), 0 4px 16px rgba(239, 68, 68, 0.04);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.15), 0 4px 20px rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.75);
+    }
+  }
 }
 
 :root {
