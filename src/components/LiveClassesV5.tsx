@@ -2311,12 +2311,9 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
               {/* Status Tabs and Chips Container */}
               <div className={`flex flex-col gap-3 ${_isScrolled ? 'md:flex-row md:items-center md:justify-between' : ''}`}>
                 
-                {/* Premium Figma Batch Category Tabs */}
-                <div className={`relative select-none flex items-end ${_isScrolled ? 'w-full md:w-auto h-[32px]' : 'w-full mt-2'}`}>
-                  {/* Horizontal line running along the bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#335CFF]" />
-                  
-                  <div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pb-0 relative z-10 flex-1">
+                {_isScrolled ? (
+                  /* Sleek Compact Segment Control in Sticky Mode */
+                  <div className="bg-slate-200/40 p-1 rounded-full flex items-center gap-0.5 border border-slate-200/50 shadow-inner shrink-0 h-[36px] w-fit">
                     {batchStatusTabs.map((tab) => {
                       const IconComponent = tab.icon;
                       const isActive = selectedStatus === tab.id;
@@ -2324,28 +2321,60 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
                         <button
                           key={tab.id}
                           onClick={() => setSelectedStatus(tab.id)}
-                          className={`relative w-[120px] sm:w-[132px] h-[32px] sm:h-[35px] flex items-center justify-center gap-1.5 cursor-pointer select-none border-none bg-transparent transition-colors duration-300 ${
-                            isActive ? 'text-[#335CFF] font-bold' : 'text-[#5C5C5C] hover:text-[#335CFF]'
+                          className={`relative px-4 py-1 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer select-none border-none bg-transparent flex items-center gap-1.5 h-full ${
+                            isActive ? 'text-[#335CFF] font-extrabold' : 'text-slate-550 hover:text-slate-800'
                           }`}
                         >
                           {isActive && (
                             <motion.div
-                              layoutId="activeCategoryTabBg"
-                              className="absolute inset-0 -z-10"
-                              transition={{ type: 'spring', stiffness: 350, damping: 32 }}
-                            >
-                              <ActiveTabBackground />
-                            </motion.div>
+                              layoutId="activeCategoryPillBg"
+                              className="absolute inset-0 bg-white rounded-full -z-10 shadow-sm border border-slate-200/30"
+                              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                            />
                           )}
-                          <div className="relative flex-row flex items-center justify-center gap-1.5 z-10 pb-0.5">
-                            <IconComponent className={`w-3.5 h-3.5 transition-colors duration-300 ${isActive ? 'text-[#335CFF]' : 'text-[#5C5C5C]'}`} />
-                            <span className="text-[12.5px] sm:text-xs tracking-[-0.084px]">{tab.label}</span>
-                          </div>
+                          <IconComponent className="w-3.5 h-3.5" />
+                          <span>{tab.label}</span>
                         </button>
                       );
                     })}
                   </div>
-                </div>
+                ) : (
+                  /* Premium Figma Folder Tabs in Normal Flow */
+                  <div className="w-full mt-2 relative select-none flex items-end justify-between gap-4">
+                    {/* Horizontal line running along the bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#335CFF]" />
+                    
+                    <div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pb-0 relative z-10 flex-1">
+                      {batchStatusTabs.map((tab) => {
+                        const IconComponent = tab.icon;
+                        const isActive = selectedStatus === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            onClick={() => setSelectedStatus(tab.id)}
+                            className={`relative w-[152px] h-[37px] flex items-center justify-center gap-2 cursor-pointer select-none border-none bg-transparent transition-colors duration-300 ${
+                              isActive ? 'text-[#335CFF] font-semibold' : 'text-[#5C5C5C] hover:text-[#335CFF]'
+                            }`}
+                          >
+                            {isActive && (
+                              <motion.div
+                                layoutId="activeCategoryTabBg"
+                                className="absolute inset-0 -z-10"
+                                transition={{ type: 'spring', stiffness: 350, damping: 32 }}
+                              >
+                                <ActiveTabBackground />
+                              </motion.div>
+                            )}
+                            <div className="relative flex-row flex items-center justify-center gap-1.5 z-10 pb-0.5">
+                              <IconComponent className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-[#335CFF]' : 'text-[#5C5C5C]'}`} />
+                              <span className="text-sm tracking-[-0.084px]">{tab.label}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Types Filter Chips Row */}
                 <div className="flex flex-wrap items-center gap-1.5 select-none">
