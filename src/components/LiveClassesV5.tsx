@@ -2336,27 +2336,34 @@ export const LiveClassesV5: React.FC<LiveClassesV5Props> = ({
                   );
                 })}
               </div>
+            </div>
 
-              {/* Right Side: Secondary Filter Dropdown */}
-              <div className="relative z-20 pb-[5px] flex items-center shrink-0">
-                <div className="relative flex items-center bg-white border border-slate-200 rounded-xl px-3 py-1 shadow-sm hover:border-[#335CFF]/50 transition-all cursor-pointer">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1.5 select-none">Type:</span>
-                  <select
-                    value={selectedCardType}
-                    onChange={(e) => setSelectedCardType(e.target.value)}
-                    className="bg-transparent border-none text-[12px] font-bold text-slate-700 focus:outline-none cursor-pointer pr-5 appearance-none z-10"
+            {/* Types Filter Chips Row */}
+            <div className="flex flex-wrap items-center gap-2 mt-4 select-none">
+              {[
+                { id: 'all', label: 'All Types' },
+                { id: 'placement', label: 'Placement Prep' },
+                { id: 'revision', label: 'Revision' },
+                { id: 'challenges', label: 'Challenges' },
+                { id: 'interview', label: 'Interview Prep' },
+                { id: 'projects', label: 'Projects' },
+                { id: 'course', label: 'Courses' },
+              ].map((type) => {
+                const isSelected = selectedCardType === type.id;
+                return (
+                  <button
+                    key={type.id}
+                    onClick={() => setSelectedCardType(type.id)}
+                    className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold border transition-all duration-200 cursor-pointer active:scale-95 ${
+                      isSelected
+                        ? 'bg-[#1845FF] border-[#1845FF] text-white shadow-sm shadow-[#1845FF]/10'
+                        : 'bg-white border-slate-200 text-slate-650 hover:bg-slate-50 hover:border-slate-350'
+                    }`}
                   >
-                    <option value="all">All Types</option>
-                    <option value="placement">Placement Prep</option>
-                    <option value="revision">Revision</option>
-                    <option value="challenges">Challenges</option>
-                    <option value="interview">Interview Prep</option>
-                    <option value="projects">Projects</option>
-                    <option value="course">Courses</option>
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none z-0" />
-                </div>
-              </div>
+                    {type.label}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Main Course Grid */}
