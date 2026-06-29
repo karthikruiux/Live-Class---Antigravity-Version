@@ -2440,7 +2440,17 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                       />
                     </div>
                     <p className="text-[13px] font-bold text-emerald-800 tracking-tight leading-none">
-                      {selectedCardType === 'placement' ? '1,500+' : selectedCardType === 'revision' ? '800+' : selectedCardType === 'challenges' ? '1,100+' : selectedCardType === 'interview' ? '2,000+' : selectedCardType === 'projects' ? '1,350+' : '2,400+'} students enrolled this week across these courses
+                      {selectedCardType === 'placement'
+                        ? '1,500+ students cleared product company rounds this week across these courses'
+                        : selectedCardType === 'revision'
+                        ? '800+ students cleared backlogs and key doubts using these revision classes'
+                        : selectedCardType === 'challenges'
+                        ? '1,100+ coders achieved top global rankings in weekly coding contests'
+                        : selectedCardType === 'interview'
+                        ? '2,000+ candidates aced system design & coding rounds with these interview courses'
+                        : selectedCardType === 'projects'
+                        ? '1,350+ full-stack portfolios built and launched on GitHub this week'
+                        : '2,400+ students learned in-demand skills in our premium live sessions this week'}
                     </p>
                   </div>
                 </div>
