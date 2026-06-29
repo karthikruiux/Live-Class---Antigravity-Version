@@ -2411,24 +2411,26 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
 
             {/* Main Course Grid */}
             <div className="mt-4">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-slate-500 font-medium">
-                    Showing <strong className="text-slate-800 font-semibold">{filteredCourses.length}</strong> {filteredCourses.length === 1 ? 'class' : 'classes'}
-                  </span>
-                  {selectedStatus !== 'all' && (
-                    <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-full capitalize">
-                      Status: {selectedStatus === 'running' ? 'Running' : selectedStatus === 'upcoming' ? 'Upcoming' : 'Completed'}
+              <div className="flex items-end justify-between mb-6">
+                <div className="flex flex-col gap-1">
+                  {selectedCardType !== 'all' ? (
+                    <h3 className="text-[18px] font-extrabold text-slate-900 font-heading tracking-tight leading-none mb-1">
+                      {selectedCardType === 'placement' ? 'Placement Prep' : selectedCardType === 'revision' ? 'Revision' : selectedCardType === 'challenges' ? 'Challenges' : selectedCardType === 'interview' ? 'Interview Prep' : selectedCardType === 'projects' ? 'Projects' : 'Courses'}
+                    </h3>
+                  ) : null}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-500 font-semibold">
+                      Showing <strong className="text-slate-800 font-bold">{filteredCourses.length}</strong> {filteredCourses.length === 1 ? 'class' : 'classes'}
                     </span>
-                  )}
-                  {selectedCardType !== 'all' && (
-                    <span className="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full border border-indigo-100 capitalize">
-                      Type: {selectedCardType === 'placement' ? 'Placement Prep' : selectedCardType === 'revision' ? 'Revision' : selectedCardType === 'challenges' ? 'Challenges' : selectedCardType === 'interview' ? 'Interview Prep' : selectedCardType === 'projects' ? 'Projects' : 'Courses'}
+                    {selectedStatus !== 'all' && (
+                      <span className="bg-slate-100 text-slate-650 text-xs font-bold px-2.5 py-1 rounded-full capitalize">
+                        Status: {selectedStatus === 'running' ? 'Running' : selectedStatus === 'upcoming' ? 'Upcoming' : 'Completed'}
+                      </span>
+                    )}
+                    <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full capitalize">
+                      Schedule: {scheduleType}
                     </span>
-                  )}
-                  <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full capitalize">
-                    Schedule: {scheduleType}
-                  </span>
+                  </div>
                 </div>
                 
                 {/* Active search tag */}
@@ -2473,6 +2475,17 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                           return 'text-fuchsia-600 bg-fuchsia-50/50 border-fuchsia-100';
                         default:
                           return 'text-slate-600 bg-slate-50 border-slate-200';
+                      }
+                    };
+
+                    const getScheduleLabel = (type: string, courseId: string) => {
+                      const numericId = parseInt(courseId.replace(/\D/g, '') || '0');
+                      if (type === 'weekend') {
+                        if (numericId % 3 === 0) return 'Only Saturday';
+                        if (numericId % 3 === 1) return 'Only Sunday';
+                        return 'Only Weekend';
+                      } else {
+                        return numericId % 2 === 1 ? 'M W F' : 'T T S';
                       }
                     };
 
@@ -2577,7 +2590,7 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                                   ? 'text-amber-700 bg-amber-50/70 border-amber-200'
                                   : 'text-indigo-750 bg-indigo-50/70 border-indigo-200'
                               }`}>
-                                {course.scheduleType === 'weekend' ? 'Weekend Batch' : 'Weekday Batch'}
+                                {getScheduleLabel(course.scheduleType || '', course.id)}
                               </span>
                             </div>
                           </div>
