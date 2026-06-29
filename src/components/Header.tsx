@@ -14,8 +14,8 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
   searchValue?: string;
   courses: SuggestionCourse[];
-  layoutVersion: 'V1' | 'V2' | 'V3' | 'V4';
-  onLayoutVersionChange: (version: 'V1' | 'V2' | 'V3' | 'V4') => void;
+  layoutVersion: 'V1' | 'V2' | 'V3' | 'V4' | 'V5';
+  onLayoutVersionChange: (version: 'V1' | 'V2' | 'V3' | 'V4' | 'V5') => void;
   onMenuToggle?: () => void;
   isScrolled?: boolean;
 }
@@ -233,6 +233,16 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               V4
+            </button>
+            <button
+              onClick={() => onLayoutVersionChange('V5')}
+              className={`px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer select-none ${
+                layoutVersion === 'V5'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-750'
+              }`}
+            >
+              V5
             </button>
           </div>
 

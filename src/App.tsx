@@ -6,6 +6,7 @@ import { FilterSection } from './components/FilterSection';
 import { LiveClassesV2 } from './components/LiveClassesV2';
 import { LiveClassesV3 } from './components/LiveClassesV3';
 import { LiveClassesV4 } from './components/LiveClassesV4';
+import { LiveClassesV5 } from './components/LiveClassesV5';
 import { CourseCarousel } from './components/CourseCarousel';
 import { CourseCard } from './components/CourseCard';
 import { PromotionalBanner } from './components/PromotionalBanner';
@@ -322,7 +323,7 @@ const initialCourses: Course[] = [
 
 function App() {
   const [currentTab, setCurrentTab] = useState('live');
-  const [layoutVersion, setLayoutVersion] = useState<'V1' | 'V2' | 'V3' | 'V4'>('V1');
+  const [layoutVersion, setLayoutVersion] = useState<'V1' | 'V2' | 'V3' | 'V4' | 'V5'>('V1');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [scheduleType, setScheduleType] = useState<'weekday' | 'weekend'>('weekday');
@@ -777,8 +778,19 @@ function App() {
               onSearchChange={setSearchTerm}
               isScrolled={isScrolled}
             />
-          ) : (
+          ) : layoutVersion === 'V4' ? (
             <LiveClassesV4 
+              coursesList={coursesList}
+              handleEnrollCourse={handleEnrollCourse}
+              handleJoinClass={handleJoinClass}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              isScrolled={isScrolled}
+              scheduleType={scheduleType}
+              onScheduleTypeChange={setScheduleType}
+            />
+          ) : (
+            <LiveClassesV5 
               coursesList={coursesList}
               handleEnrollCourse={handleEnrollCourse}
               handleJoinClass={handleJoinClass}
