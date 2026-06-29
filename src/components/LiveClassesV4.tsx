@@ -708,7 +708,7 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
     const courseSchedule = (course.scheduleType === 'weekly' || course.scheduleType === 'weekday' || course.scheduleType === 'mwf' || course.scheduleType === 'tts')
       ? 'weekday'
       : 'weekend';
-    const matchesSchedule = courseSchedule === scheduleType;
+    const matchesSchedule = course.id.endsWith('-c1') ? true : (courseSchedule === scheduleType);
 
     // 2. Status Filter matching user business rules:
     // - Running: currently active/running (live, or partially completed, or next class scheduled and not fully completed)
@@ -2665,14 +2665,25 @@ export const LiveClassesV4: React.FC<LiveClassesV4Props> = ({
                             </div>
 
                             {/* Card-Level Schedule Badge */}
-                            <div className="flex mt-1.5">
-                              <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg border leading-none select-none ${
-                                course.scheduleType === 'weekend'
-                                  ? 'text-amber-700 bg-amber-50/70 border-amber-200'
-                                  : 'text-indigo-750 bg-indigo-50/70 border-indigo-200'
-                              }`}>
-                                {getScheduleLabel(course.scheduleType || '', course.id)}
-                              </span>
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                              {course.id.endsWith('-c1') ? (
+                                <>
+                                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg border border-indigo-200 leading-none select-none text-indigo-750 bg-indigo-50/70">
+                                    M W F
+                                  </span>
+                                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg border border-amber-200 leading-none select-none text-amber-700 bg-amber-50/70">
+                                    Weekend
+                                  </span>
+                                </>
+                              ) : (
+                                <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg border leading-none select-none ${
+                                  course.scheduleType === 'weekend'
+                                    ? 'text-amber-700 bg-amber-50/70 border-amber-200'
+                                    : 'text-indigo-750 bg-indigo-50/70 border-indigo-200'
+                                }`}>
+                                  {getScheduleLabel(course.scheduleType || '', course.id)}
+                                </span>
+                              )}
                             </div>
                           </div>
 
